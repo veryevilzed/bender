@@ -85,6 +85,7 @@ defmodule Bender.Utils do
     end
 
     def required_middlewares(middleware) do
+
         req = deps middleware
         case req do
             [] -> [middleware]

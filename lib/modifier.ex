@@ -12,6 +12,7 @@ defmodule Bender.Modifier do
                         defp break!(args = %State{bends: {a,b}}), do: %{ args | bends: {[], []} }
 
                         defp return(args = %State{response: resp}, result, status \\ :ok), do: %{ args | response: %{ resp | result: result, status: status } }
+                        defp result(args, result, status \\ :ok), do: return(args, result, status)
                         defp error(args = %State{response: resp}, result), do: %{ args | response: %{ resp | result: result, status: :error } }
                         defp ok(args = %State{response: resp}), do: %{ args | response: %{ resp | status: :ok } }
 
