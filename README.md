@@ -1,0 +1,4 @@
+Emitter
+=======
+
+** TODO: Add description **
