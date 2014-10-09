@@ -32,15 +32,15 @@ defmodule Bender.Core do
                 bends = Dict.get(opts, :bends, []) 
                 bends = Enum.map(bends, 
                     fn({{_, _, [x, :init]}, _, mopts}) -> 
-                        {_, _, [name]} = x
+                        {_, _, name} = x
                         name = name |> Enum.map(&Atom.to_string(&1) )  |> Enum.join "."
                         {:"Elixir.#{name}", mopts}
                     ({x, mopts}) -> 
-                        {_, _, [name]} = x
+                        {_, _, name} = x
                         name = name |> Enum.map(&Atom.to_string(&1) )  |> Enum.join "."
                         {:"Elixir.#{name}", mopts}
                     (x) -> 
-                        {_, _, [name]} = x
+                        {_, _, name} = x
                         name = name |> Enum.map(&Atom.to_string(&1) )  |> Enum.join "."
                         :"Elixir.#{name}"
                     end)
