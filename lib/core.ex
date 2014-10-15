@@ -31,11 +31,11 @@ defmodule Bender.Core do
             defmacro defpipe slug, opts \\ [] do
                 bends = Dict.get(opts, :bends, []) 
                 bends = Enum.map(bends, 
-                    fn({{_, _, [x, :init]}, _, mopts}) -> 
+                    fn({{_, _, [x, :init]}, _, [mopts]}) -> 
                         {_, _, name} = x
                         name = name |> Enum.map(&Atom.to_string(&1) )  |> Enum.join "."
                         {:"Elixir.#{name}", mopts}
-                    ({x, mopts}) -> 
+                    ({x, [mopts]}) -> 
                         {_, _, name} = x
                         name = name |> Enum.map(&Atom.to_string(&1) )  |> Enum.join "."
                         {:"Elixir.#{name}", mopts}
