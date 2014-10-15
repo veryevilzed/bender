@@ -78,7 +78,7 @@ end
 Test your Bender
 
 ```
-MyTest.FirstBender.request! name: "dude"
+MyTest.FirstBender.request! "test", name: "dude"
 
 => "Hello World, dude!"
 
