@@ -3,6 +3,9 @@ Bender
 
 ![bite my shiny metal ass](bender.png)
 
+
+Cigarettes, alcohol and drugs make your code more slowly!
+
 Bend your code
 --------------
 
