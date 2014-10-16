@@ -29,6 +29,7 @@ defmodule Bender.Core do
             end
 
             defmacro defpipe slug, opts \\ [] do
+                dir = Dict.get(opts, :direction, :both) 
                 bends = Dict.get(opts, :bends, []) 
                 bends = Enum.map(bends, 
                     fn({{_, _, [x, :init]}, _, [mopts]}) -> 
@@ -51,7 +52,7 @@ defmodule Bender.Core do
 
                 quote do
                     defp _request(unquote(slug), state = %State{ extra: extra, bends: {a, b} }) do
-                        %{ state | bends: { a ++ unquote(bends), b }, extra: Map.merge(extra, Dict.get(unquote(opts), :extra, %{}))  } |> process_in
+                        %{ state | bends: { a ++ unquote(bends), b }, extra: Map.merge(extra, Dict.get(unquote(opts), :extra, %{}))  } |> process_in unquote(dir)
                     end
                 end
             end

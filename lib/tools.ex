@@ -15,18 +15,25 @@ defmodule Bender.Tools do
                 end
                 process_out(args)
             end
-            defp process_in(args) do
+            defp process_in(args, :both) do
                 case take_request_middleware(args) do
                     {:ok, middleware, args} -> 
                         args = case middleware do
-                            {middleware, opts} -> process_in(apply(middleware, :process, [:in, args, opts]))
-                            middleware ->         process_in(apply(middleware, :process, [:in, args, []]  ))
+                            {middleware, opts} -> process_in(apply(middleware, :process, [:in, args, opts]), :both)
+                            middleware ->         process_in(apply(middleware, :process, [:in, args, []]  ), :both)
                         end
                     {:empty, args} ->
                       process_out(args)
                 end                       
             end
-
+            defp process_in(args=%State{ bends: {[],_} }, :in), do: args
+            defp process_in(args=%State{ bends: {[middleware|tail],_} }, :in) do
+                args = %{args | bends: {tail, []}}
+                case middleware do
+                    {middleware, opts} -> process_in(apply(middleware, :process, [:in, args, opts]), :in)
+                    middleware ->         process_in(apply(middleware, :process, [:in, args, []]  ), :in)
+                end
+            end
         end
     end
 end
