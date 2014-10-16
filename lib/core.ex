@@ -24,6 +24,9 @@ defmodule Bender.Core do
                                 {_, result, _} -> result
                             end
                         end
+
+                        def stream(slug, request \\ []), do: Stream.repeatedly fn()-> request(slug, request) end
+                        def stream!(slug, request \\ []), do: Stream.repeatedly fn()-> request!(slug, request) end
                     end
                 end
             end
