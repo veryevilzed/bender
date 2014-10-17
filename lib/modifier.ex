@@ -17,6 +17,11 @@ defmodule Bender.Modifier do
                         defp error(args = %State{response: resp}, result), do: %{ args | response: %{ resp | result: result, status: :error } }
                         defp ok(args = %State{response: resp}), do: %{ args | response: %{ resp | status: :ok } }
 
+                        defp retry(args=%State{request: re, slug: slug, bender: bender}) do
+                            {status, response, extra} = apply(bender, :request, [slug, re])
+                            args |> break |> return(response, status) |> extra(extra)
+                        end
+
                         defp patch(args = %State{context: context}, val) when is_map(val), do: %{args | context: Dict.merge(context, val)}
                         defp patch(args = %State{context: context}, key, val) when is_atom(key), do: %{args | context: Dict.put(context, key, val)}
                         defp patch(args = %State{context: context}, key, val) when is_list(key), do: %{args | context: put_in(context, key, val)}

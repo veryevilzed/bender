@@ -8,6 +8,7 @@ defmodule Bender.State do
     defstruct [ 
         bends: {[],[]},
         slug: nil,
+        bender: nil,
         request: %{ 
             extra: %{}
         }, 
