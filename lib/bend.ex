@@ -1,4 +1,4 @@
-defmodule Bender.Modifier do
+defmodule Bender.Bend do
     defmacro __using__(_opts) do
         quote location: :keep do
             defmacro defbend name, opts \\ [], code do
@@ -17,7 +17,7 @@ defmodule Bender.Modifier do
                         defp error(args = %State{response: resp}, result), do: %{ args | response: %{ resp | result: result, status: :error } }
                         defp ok(args = %State{response: resp}), do: %{ args | response: %{ resp | status: :ok } }
 
-                        defp retry(args=%State{request: re, slug: slug, bender: bender}) do
+                        defp retry(args=%State{slug: slug, bender: bender, __request__: re}) do
                             {status, response, extra} = apply(bender, :request, [slug, re])
                             args |> break |> return(response, status) |> extra(extra)
                         end

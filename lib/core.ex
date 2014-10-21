@@ -13,7 +13,7 @@ defmodule Bender.Core do
                         defp _request(_, state), do: state
 
                         def request(slug, request \\ []) do
-                            state =  %State{bends: { [] ++ unquote(bends), [] }, slug: slug, bender: unquote(name), extra: Dict.get(unquote(opts), :extra, %{}), request: Dict.merge(%{extra: %{}}, request)}         
+                            state =  %State{__request__: request, bends: { [] ++ unquote(bends), [] }, slug: slug, bender: unquote(name), extra: Dict.get(unquote(opts), :extra, %{}), request: Dict.merge(%{extra: %{}}, request)}         
                             %{response: %{result: result, status: status, extra: extra}} = _request(slug, state)
                             {status, result, extra}
                         end
