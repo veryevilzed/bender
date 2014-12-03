@@ -7,8 +7,12 @@ defmodule Bender.Core do
                 quote do
                     defmodule unquote(name) do
                         use Bender.Tools
+                        all_bends = []
 
                         unquote(code)
+
+                        @all_bends all_bends
+                        def all, do: @all_bends
 
                         defp _request(_, state), do: state
 
@@ -54,6 +58,7 @@ defmodule Bender.Core do
 
 
                 quote do
+                    all_bends = [unquote(slug) | all_bends]
                     defp _request(unquote(slug), state = %State{ extra: extra, bends: {a, b} }) do
                         %{ state | bends: { a ++ unquote(bends), b }, extra: Map.merge(extra, Dict.get(unquote(opts), :extra, %{}))  } |> process_in unquote(dir)
                     end
