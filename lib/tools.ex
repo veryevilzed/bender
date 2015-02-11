@@ -99,5 +99,4 @@ defmodule Bender.Utils do
             req -> Enum.map(req, fn(x) -> required_middlewares x end) ++ [middleware]
         end
     end
-
 end

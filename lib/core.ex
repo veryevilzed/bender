@@ -24,7 +24,7 @@ defmodule Bender.Core do
 
                         def request!(slug, request \\ []) do
                             case request(slug, request) do
-                                {:error, error, _} -> raise error
+                                {:error, error, _} -> raise %RuntimeError{message: "Error: #{error}"}
                                 {_, result, _} -> result
                             end
                         end
