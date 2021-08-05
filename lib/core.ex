@@ -3,7 +3,7 @@ defmodule Bender.Core do
         quote location: :keep do
             alias Bender.State
             defmacro defbender name, opts \\ [], code do
-                bends = Dict.get opts, :bends, []
+                bends = Keyword.get opts, :bends, []
                 quote do
                     defmodule unquote(name) do
                         use Bender.Tools
@@ -17,7 +17,7 @@ defmodule Bender.Core do
                         defp _request(_, state), do: state
 
                         def request(slug, request \\ []) do
-                            state =  %State{__request__: request, bends: { [] ++ unquote(bends), [] }, slug: slug, bender: unquote(name), extra: Dict.get(unquote(opts), :extra, %{}), request: Dict.merge(%{extra: %{}}, request)}         
+                            state =  %State{__request__: request, bends: { [] ++ unquote(bends), [] }, slug: slug, bender: unquote(name), extra: Keyword.get(unquote(opts), :extra, %{}), request: Map.merge(%{extra: %{}}, Enum.into(request, %{}))}         
                             %{response: %{result: result, status: status, extra: extra}} = _request(slug, state)
                             {status, result, extra}
                         end
@@ -36,31 +36,31 @@ defmodule Bender.Core do
             end
 
             defmacro defpipe slug, opts \\ [] do
-                dir = Dict.get(opts, :direction, :both) 
-                bends = Dict.get(opts, :bends, []) 
+                dir = Keyword.get(opts, :direction, :both) 
+                bends = Keyword.get(opts, :bends, []) 
                 bends = Enum.map(bends, 
                     fn({{_, _, [x, :init]}, _, [mopts]}) -> 
                         {_, _, name} = x
-                        name = name |> Enum.map(&Atom.to_string(&1) )  |> Enum.join "."
+                        name = name |> Enum.map(&Atom.to_string(&1)) |> Enum.join(".")
                         {:"Elixir.#{name}", mopts}
                     ({x, [mopts]}) -> 
                         {_, _, name} = x
-                        name = name |> Enum.map(&Atom.to_string(&1) )  |> Enum.join "."
+                        name = name |> Enum.map(&Atom.to_string(&1)) |> Enum.join(".")
                         {:"Elixir.#{name}", mopts}
                     (x) -> 
                         {_, _, name} = x
-                        name = name |> Enum.map(&Atom.to_string(&1) )  |> Enum.join "."
+                        name = name |> Enum.map(&Atom.to_string(&1)) |> Enum.join(".")
                         :"Elixir.#{name}"
                     end)
                 bends = Enum.map(bends, fn(x)-> Bender.Utils.required_middlewares x end) 
                     |> List.flatten 
-                    |> Bender.Utils.filter_middlewares []
+                    |> Bender.Utils.filter_middlewares([])
 
 
                 quote do
                     all_bends = [unquote(slug) | all_bends]
                     defp _request(unquote(slug), state = %State{ extra: extra, bends: {a, b} }) do
-                        %{ state | bends: { a ++ unquote(bends), b }, extra: Map.merge(extra, Dict.get(unquote(opts), :extra, %{}))  } |> process_in unquote(dir)
+                        %{ state | bends: { a ++ unquote(bends), b }, extra: Map.merge(extra, Keyword.get(unquote(opts), :extra, %{})) } |> process_in(unquote(dir))
                     end
                 end
             end

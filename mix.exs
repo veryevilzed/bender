@@ -4,8 +4,8 @@ defmodule Bender.Mixfile do
   def project do
     [app: :bender,
      version: "0.0.1",
-     elixir: "~> 1.0.0",
-     deps: deps]
+     elixir: "~> 1.12.0",
+     deps: deps()]
   end
 
   # Configuration for the OTP application
