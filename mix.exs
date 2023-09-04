@@ -4,7 +4,7 @@ defmodule Bender.Mixfile do
   def project() do
     [app: :bender,
      version: "0.0.1",
-     elixir: "~> 1.14.0",
+     elixir: "~> 1.15.0",
      deps: []]
   end
 
