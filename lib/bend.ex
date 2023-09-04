@@ -1,9 +1,9 @@
 defmodule Bender.Bend do
     defmacro __using__(_opts) do
         quote location: :keep do
-            defmacro defbend name, opts \\ [], code do
-                deps = Dict.get opts, :deps, []
-                chain_type = Dict.get opts, :chain_type, :only
+            defmacro defbend(name, opts \\ [], code) do
+                deps = Keyword.get(opts, :deps, [])
+                chain_type = Keyword.get(opts, :chain_type, :only)
                 quote do
                     defmodule unquote(name) do
                         alias Bender.State
@@ -22,8 +22,8 @@ defmodule Bender.Bend do
                             args |> break |> return(response, status) |> extra(extra)
                         end
 
-                        defp patch(args = %State{context: context}, val) when is_map(val), do: %{args | context: Dict.merge(context, val)}
-                        defp patch(args = %State{context: context}, key, val) when is_atom(key), do: %{args | context: Dict.put(context, key, val)}
+                        defp patch(args = %State{context: context}, val) when is_map(val), do: %{args | context: Map.merge(context, val)}
+                        defp patch(args = %State{context: context}, key, val) when is_atom(key), do: %{args | context: Map.put(context, key, val)}
                         defp patch(args = %State{context: context}, key, val) when is_list(key), do: %{args | context: put_in(context, key, val)}
 
                         def deps, do: unquote(deps)

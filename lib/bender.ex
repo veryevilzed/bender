@@ -4,7 +4,8 @@ defmodule Bender do
 end
 
 defmodule Bender.State do
-    @derive [Access]
+    @behaviour Access
+
     defstruct [ 
         __request__: %{},
         bends: {[],[]},
@@ -21,4 +22,22 @@ defmodule Bender.State do
         context: %{},
         extra: %{}
     ]
+
+    def fetch(term, key) do
+        term
+        |> Map.from_struct()
+        |> Map.fetch(key)
+    end
+
+    def get(term, key, default) do
+        term
+        |> Map.from_struct()
+        |> Map.get(key, default)
+    end
+
+    def get_and_update(data, key, function) do
+        data
+        |> Map.from_struct()
+        |> Map.get_and_update(key, function)
+    end
 end

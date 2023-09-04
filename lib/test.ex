@@ -15,8 +15,8 @@ defbend Out2, deps: [] do
 end
 
 defbend Out, deps: [Out2] do
-    def process(:out, state=%{extra: extra}, _opts) do
-        state |> return "YES! : #{inspect extra} #{inspect _opts}", :hex
+    def process(:out, state = %{extra: extra}, opts) do
+        state |> return("YES! : #{inspect extra} #{inspect opts}", :hex)
     end
 end
 
