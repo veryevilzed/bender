@@ -29,6 +29,12 @@ defmodule Bender.State do
         |> Map.fetch(key)
     end
 
+    def pop(term, key) do
+        term
+        |> Map.from_struct()
+        |> Map.pop(key)
+    end
+
     def get(term, key, default) do
         term
         |> Map.from_struct()
